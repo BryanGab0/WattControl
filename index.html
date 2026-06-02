@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WattControl — estime e gerencie o consumo de energia elétrica da sua casa.">
+  <title>WattControl</title>
+
+  <!-- Tipografia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Biblioteca de gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- ============================ TOPBAR ============================ -->
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <div class="brand">
+        <div class="brand__mark">⚡</div>
+        <div>
+          <div class="brand__name">Watt<span>Control</span></div>
+          <div class="brand__tag">Gestão inteligente de consumo elétrico</div>
+        </div>
+      </div>
+      <div class="tarifa-box">
+        <label for="tarifa">Tarifa de energia</label>
+        <span class="unit">R$</span>
+        <input type="text" id="tarifa" inputmode="decimal" aria-label="Tarifa em reais por kWh">
+        <span class="unit">/kWh</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ============================= HERO ============================ -->
+    <section class="hero anim">
+      <h1>Quanto sua casa <em>gasta de energia?</em></h1>
+      <p>Monte sua residência virtual escolhendo os eletrodomésticos e o tempo de uso diário.
+         A plataforma estima o consumo (kWh), o custo na conta de luz e ainda compara o seu
+         gasto com a média das casas brasileiras ao longo do ano.</p>
+    </section>
+
+    <!-- ============================= KPIs =========================== -->
+    <section class="kpi-grid anim" aria-label="Indicadores principais">
+      <article class="kpi kpi--energy">
+        <div class="kpi__label">⚡ Consumo mensal</div>
+        <div class="kpi__value" id="kpi-kwh">0 <small>kWh</small></div>
+        <div class="kpi__sub">estimativa em 30 dias</div>
+      </article>
+      <article class="kpi kpi--cost">
+        <div class="kpi__label">💸 Custo na conta</div>
+        <div class="kpi__value" id="kpi-custo">R$ 0,00</div>
+        <div class="kpi__sub" id="kpi-custo-ano">R$ 0,00 por ano</div>
+      </article>
+      <article class="kpi kpi--avg">
+        <div class="kpi__label">📊 Comparação nacional</div>
+        <div class="kpi__value" id="kpi-media">—</div>
+        <div class="kpi__sub" id="kpi-media-sub">Adicione aparelhos para comparar</div>
+      </article>
+      <article class="kpi kpi--co2">
+        <div class="kpi__label">🌱 Emissão de CO₂</div>
+        <div class="kpi__value" id="kpi-co2">0 <small>kg</small></div>
+        <div class="kpi__sub">pegada de carbono mensal</div>
+      </article>
+    </section>
+
+    <!-- ====================== ESCOLHA DE APARELHOS =================== -->
+    <section class="section">
+      <div class="section__head">
+        <h2>1 · Escolha os eletrodomésticos</h2>
+        <span class="hint">Clique para adicionar à sua casa virtual</span>
+      </div>
+
+      <div class="panel">
+        <div class="toolbar">
+          <div class="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+            <input type="text" id="busca" placeholder="Buscar aparelho (ex.: chuveiro, TV, ar...)">
+          </div>
+          <div class="chips" id="chips"><!-- preenchido via JS --></div>
+        </div>
+        <div class="catalog" id="catalogo"><!-- preenchido via JS --></div>
+      </div>
+    </section>
+
+    <!-- ================== AJUSTE DE USO + TABELA ===================== -->
+    <section class="section">
+      <div class="section__head">
+        <h2>2 · Ajuste o tempo de uso diário</h2>
+        <span class="hint">Defina horas por dia e quantidade de cada aparelho</span>
+      </div>
+      <div class="selected" id="selecionados"><!-- tabela via JS --></div>
+    </section>
+
+    <!-- ========================== DASHBOARD ========================= -->
+    <section class="section">
+      <div class="section__head">
+        <h2>3 · Dashboard de consumo</h2>
+        <span class="hint">Visualização gráfica dos seus gastos</span>
+      </div>
+
+      <div class="charts-grid">
+        <!-- PIZZA -->
+        <div class="chart-card">
+          <h3>Consumo por categoria</h3>
+          <p class="sub">Participação de cada grupo no total de kWh</p>
+          <div class="chart-holder"><canvas id="grafPizza"></canvas></div>
+        </div>
+
+        <!-- BARRAS -->
+        <div class="chart-card">
+          <h3>Maiores vilões da conta</h3>
+          <p class="sub">Custo mensal por aparelho (Top 8)</p>
+          <div class="chart-holder"><canvas id="grafBarras"></canvas></div>
+        </div>
+
+        <!-- LINHAS (comparação anual) -->
+        <div class="chart-card full">
+          <h3>Projeção anual × média brasileira</h3>
+          <p class="sub">Estimativa do seu consumo mês a mês, com variação sazonal (ar-condicionado no verão, chuveiro no inverno), comparada à média residencial do Brasil.</p>
+          <div class="chart-holder"><canvas id="grafLinhas"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ DICAS =========================== -->
+    <section class="section">
+      <div class="section__head">
+        <h2>Dicas para economizar</h2>
+      </div>
+      <div class="tips">
+        <div class="tip">
+          <div class="em">🚿</div>
+          <h4>Chuveiro é campeão</h4>
+          <p>O chuveiro elétrico pode representar até 25% da conta. Use a posição "verão" e reduza o tempo de banho.</p>
+        </div>
+        <div class="tip">
+          <div class="em">🌬️</div>
+          <h4>Ar-condicionado a 23°C</h4>
+          <p>Cada grau a menos eleva o consumo. Mantenha entre 23–24°C e limpe os filtros regularmente.</p>
+        </div>
+        <div class="tip">
+          <div class="em">💡</div>
+          <h4>Troque por LED</h4>
+          <p>Lâmpadas LED consomem até 80% menos que as incandescentes e duram muito mais.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================== FOOTER =========================== -->
+    <footer>
+      <div>
+        <b>WattControl</b> — projeto acadêmico de estimativa e gestão de consumo de energia elétrica residencial.
+      </div>
+      <div style="margin-top:6px">
+        Cálculo: consumo (kWh) = potência (W) × horas/dia × 30 dias × quantidade ÷ 1000.
+        Tarifa e potências são valores médios de referência (ANEEL / PROCEL) e servem para estimativa educacional.
+        Média nacional adotada: <b id="rodape-media"></b> kWh/mês.
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Scripts da aplicação (ordem importa: dados → lógica) -->
+  <script src="js/database.js"></script>
+  <script src="js/app.js"></script>
+  <script>document.getElementById('rodape-media').textContent = MEDIA_BRASIL_MENSAL;</script>
+</body>
+</html>
