@@ -181,7 +181,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   -webkit-box-orient: vertical;
 }
 .appl__watt { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
-.appl__add { margin-left: auto; flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--energy); color: #fff; display: grid; place-items: center; font-size: 18px; line-height: 1; }
+.appl__add { margin-left: auto; flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--energy); color: #fff; display: grid; place-items: center; font-size: 18px; line-height: 1; padding-bottom: 4px; }
 
 /* ---------------------------- Selected list -------------------------- */
 .selected { margin-top: 22px; }
@@ -271,9 +271,46 @@ footer b { color: var(--ink-soft); }
   .section__head { flex-direction: column; align-items: stretch; }
   .panel, .selected, .charts-grid, .tips { width: 100%; }
   .catalog { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
-  .tbl { display: block; overflow-x: auto; }
-  .tbl thead, .tbl tbody, .tbl tr, .tbl th, .tbl td { display: table; }
-  .tbl th, .tbl td { white-space: nowrap; }
+  /* Tabela → Cards no mobile */
+  table.tbl { display: block; background: transparent; border: none; box-shadow: none; border-radius: 0; }
+  .tbl thead { display: none; }
+  .tbl tbody, .tbl tfoot { display: block; }
+
+  .tbl tbody tr {
+    position: relative;
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    padding: 13px 46px 13px 13px;
+    margin-bottom: 10px;
+  }
+  .tbl tbody tr:last-child { margin-bottom: 0; }
+  .tbl tbody tr:hover { background: var(--surface-2); }
+
+  .tbl tbody td { display: block; padding: 0; border: none; white-space: normal; }
+
+  .tbl tbody td:nth-child(1) { padding-bottom: 10px; margin-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .tbl tbody td:nth-child(2) { display: none; }
+  .tbl tbody td:nth-child(3) { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; }
+  .tbl tbody td:nth-child(3)::before { content: "Horas/dia"; font-size: 11px; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .06em; }
+  .tbl tbody td:nth-child(4) { display: none; }
+  .tbl tbody td:nth-child(5) { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; }
+  .tbl tbody td:nth-child(5)::before { content: "Consumo/mês"; font-size: 11px; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .06em; }
+  .tbl tbody td:nth-child(6) { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; }
+  .tbl tbody td:nth-child(6)::before { content: "Custo/mês"; font-size: 11px; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .06em; }
+  .tbl tbody td:nth-child(7) { position: absolute; top: 10px; right: 8px; padding: 0; border: none; }
+
+  .tbl tfoot tr {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 6px; padding: 14px 13px; margin-top: 10px; border-radius: var(--radius-sm);
+  }
+  .tbl tfoot td { display: none; padding: 0; border: none; }
+  .tbl tfoot td:first-child,
+  .tbl tfoot td:nth-child(5),
+  .tbl tfoot td:nth-child(6) { display: block; }
+  .tbl tfoot .num { font-size: 15px; }
 }
 @media (max-width: 560px) {
   .wrap { padding: 0 16px; }
@@ -292,5 +329,7 @@ footer b { color: var(--ink-soft); }
   .tips { gap: 12px; }
   .tip { padding: 16px; }
   .footer { padding: 24px 0 40px; }
-  .tbl thead th.hide-sm, .tbl tbody td.hide-sm { display: none; }
+  .tbl tbody td:nth-child(3)::before { font-size: 10.5px; }
+  .tbl tbody td:nth-child(5)::before { font-size: 10.5px; }
+  .tbl tbody td:nth-child(6)::before { font-size: 10.5px; }
 }
