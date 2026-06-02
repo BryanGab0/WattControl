@@ -243,14 +243,54 @@ footer b { color: var(--ink-soft); }
 .anim { animation: fadeUp .5s ease both; }
 
 /* --------------------------- Responsive ------------------------------ */
-@media (max-width: 920px) {
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 1024px) {
+  .wrap { padding: 0 20px; }
+  .topbar__inner { gap: 16px; }
+  .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .charts-grid { grid-template-columns: 1fr; }
   .tips { grid-template-columns: 1fr; }
 }
+@media (max-width: 820px) {
+  .toolbar { align-items: stretch; }
+  .search { flex: 1 1 100%; }
+  .chips { width: 100%; }
+  .catalog { max-height: none; }
+  .chart-card .chart-holder { height: 260px; }
+  .chart-card.full .chart-holder { height: 300px; }
+}
+@media (max-width: 720px) {
+  .topbar__inner { height: auto; padding: 16px 0; flex-direction: column; align-items: stretch; }
+  .brand { padding: 12px 0; gap: 14px; }
+  .brand__mark { width: 48px; height: 48px; font-size: 24px; }
+  .tarifa-box { width: 100%; justify-content: space-between; flex-wrap: nowrap; gap: 6px; padding: 8px 10px; margin-top: -8px; margin-bottom: 12px; }
+  .tarifa-box label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .tarifa-box input { width: auto; min-width: 48px; max-width: 90px; }
+  .tarifa-box .unit { white-space: nowrap; }
+  .hero { padding: 32px 0 16px; }
+  .hero p { font-size: 15.5px; }
+  .section__head { flex-direction: column; align-items: stretch; }
+  .panel, .selected, .charts-grid, .tips { width: 100%; }
+  .catalog { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  .tbl { display: block; overflow-x: auto; }
+  .tbl thead, .tbl tbody, .tbl tr, .tbl th, .tbl td { display: table; }
+  .tbl th, .tbl td { white-space: nowrap; }
+}
 @media (max-width: 560px) {
+  .wrap { padding: 0 16px; }
   .kpi-grid { grid-template-columns: 1fr; }
-  .topbar__inner { height: auto; padding: 12px 0; flex-direction: column; align-items: flex-start; }
-  .hero { padding: 30px 0 10px; }
+  .hero { padding: 26px 0 12px; }
+  .hero h1 { font-size: clamp(30px, 8vw, 42px); }
+  .kpi { padding: 18px; }
+  .toolbar { padding: 14px; gap: 12px; }
+  .search { padding: 10px 12px; }
+  .search input { font-size: 14px; }
+  .chips { gap: 6px; }
+  .appl { padding: 10px 12px; }
+  .appl__name { font-size: 12.8px; }
+  .chart-holder { height: 230px; }
+  .chart-card.full .chart-holder { height: 270px; }
+  .tips { gap: 12px; }
+  .tip { padding: 16px; }
+  .footer { padding: 24px 0 40px; }
   .tbl thead th.hide-sm, .tbl tbody td.hide-sm { display: none; }
 }
