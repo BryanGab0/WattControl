@@ -281,7 +281,19 @@ function renderBarras(linhas) {
       },
       scales: {
         x: { grid: { color: '#EFEADF' }, ticks: { callback: (v) => 'R$ ' + v } },
-        y: { grid: { display: false }, ticks: { font: { size: 12 } } }
+        y: {
+          grid: { display: false },
+          ticks: {
+            font: { size: 12 },
+            callback: function(value) {
+              const label = this.getLabelForValue(value);
+              if (window.innerWidth < 480 && label.length > 18) {
+                return label.slice(0, 17) + '…';
+              }
+              return label;
+            }
+          }
+        }
       }
     }
   });
