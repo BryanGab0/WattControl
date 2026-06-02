@@ -50,8 +50,7 @@ function detalharSelecionados() {
       custo: kwh * tarifa
     });
   });
-  // Ordena do maior para o menor consumo.
-  return linhas.sort((a, b) => b.kwh - a.kwh);
+  return linhas;
 }
 
 // Totais gerais.
@@ -260,7 +259,7 @@ function renderPizza(linhas) {
 
 /* Gráfico de BARRAS/COLUNAS — custo mensal por aparelho (Top 8) */
 function renderBarras(linhas) {
-  const top = linhas.slice(0, 8);
+  const top = [...linhas].sort((a, b) => b.custo - a.custo).slice(0, 8);
   const labels = top.map((l) => l.nome);
   const valores = top.map((l) => l.custo);
   const cores = top.map((l) => CORES_CATEGORIA[l.categoria]);
