@@ -93,6 +93,6 @@ Custo (R$) = Consumo (kWh) × Tarifa (R$/kWh)
 
 ## 🛠️ Tecnologias
 
-- HTML5, CSS3 e JavaScript (puro, sem frameworks)
+- HTML5, CSS3 e JavaScript
 - [Chart.js](https://www.chartjs.org/) para os gráficos
 - Google Fonts (Bricolage Grotesque + Plus Jakarta Sans)
