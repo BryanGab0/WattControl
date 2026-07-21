@@ -47,7 +47,7 @@ Basta abrir o arquivo **`index.html`** em qualquer navegador moderno (Chrome, Ed
 
 > É necessário **conexão com a internet** na primeira abertura, pois a biblioteca de gráficos (Chart.js) e as fontes são carregadas via CDN.
 
-Opcional — para rodar com um servidor local:
+Opcional - para rodar com um servidor local:
 
 ```bash
 python -m http.server 8000
