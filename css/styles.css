@@ -1,10 +1,3 @@
-/* =======================================================================
-   styles.css  —  WattControl
-   Tema: "Sol & Energia" — claro, quente, com âmbar elétrico e verde-economia.
-   Tipografia: Bricolage Grotesque (display) + Plus Jakarta Sans (texto).
-   ======================================================================= */
-
-/* ----------------------------- Tokens -------------------------------- */
 :root {
   /* Cores base */
   --bg:           #F6F3EC;
@@ -17,12 +10,12 @@
   --line:         #E6E1D4;
   --line-strong:  #D6D0BF;
 
-  /* Acentos */
-  --energy:       #F5A623;   /* âmbar elétrico  */
+  /* Cores destaque */
+  --energy:       #F5A623;
   --energy-deep:  #E08600;
-  --eco:          #1FA67A;   /* verde economia  */
+  --eco:          #1FA67A;
   --eco-deep:     #16805E;
-  --alert:        #E8543F;   /* coral alerta    */
+  --alert:        #E8543F;
   --sky:          #3D7DD8;
 
   /* Sombras */
@@ -158,7 +151,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 .chip:hover { border-color: var(--energy); color: var(--energy-deep); }
 .chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
 
-/* catálogo grid */
+/* ---------------------------- Catalog grid --------------------------- */
 .catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; padding: 18px; max-height: 430px; overflow-y: auto; }
 .appl {
   display: flex; align-items: center; gap: 12px; text-align: left;
@@ -271,7 +264,6 @@ footer b { color: var(--ink-soft); }
   .section__head { flex-direction: column; align-items: stretch; }
   .panel, .selected, .charts-grid, .tips { width: 100%; }
   .catalog { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
-  /* Tabela → Cards no mobile */
   table.tbl { display: block; background: transparent; border: none; box-shadow: none; border-radius: 0; }
   .tbl thead { display: none; }
   .tbl tbody, .tbl tfoot { display: block; }
