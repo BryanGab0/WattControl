@@ -6,15 +6,12 @@
   <meta name="description" content="WattControl — estime e gerencie o consumo de energia elétrica da sua casa.">
   <title>WattControl</title>
 
-  <!-- Tipografia -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Estilos -->
   <link rel="stylesheet" href="css/styles.css">
 
-  <!-- Biblioteca de gráficos -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -122,7 +119,7 @@
           <div class="chart-holder"><canvas id="grafBarras"></canvas></div>
         </div>
 
-        <!-- LINHAS (comparação anual) -->
+        <!-- LINHAS -->
         <div class="chart-card full">
           <h3>Projeção anual × média brasileira</h3>
           <p class="sub">Estimativa do seu consumo mês a mês, com variação sazonal (ar-condicionado no verão, chuveiro no inverno), comparada à média residencial do Brasil.</p>
@@ -169,7 +166,6 @@
 
   </main>
 
-  <!-- Scripts da aplicação (ordem importa: dados → lógica) -->
   <script src="js/database.js"></script>
   <script src="js/app.js"></script>
   <script>document.getElementById('rodape-media').textContent = MEDIA_BRASIL_MENSAL;</script>
