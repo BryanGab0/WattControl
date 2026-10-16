@@ -1,40 +1,14 @@
-/* =======================================================================
-   database.js  —  Banco de dados da plataforma WattControl
-   -----------------------------------------------------------------------
-   Contém:
-     • Parâmetros nacionais (tarifa média, consumo médio brasileiro)
-     • Catálogo de eletrodomésticos mais usados no Brasil com potências
-       típicas (em Watts), categoria, ícone e horas de uso sugeridas
-     • Perfil sazonal do consumo médio residencial brasileiro (12 meses)
-
-   Fontes de referência para as potências: manuais de fabricantes,
-   tabelas INMETRO/PROCEL e cartilhas de eficiência energética da ANEEL.
-   Os valores são MÉDIAS de mercado e servem para estimativa educacional.
-   ======================================================================= */
-
-/* ---- Parâmetros nacionais editáveis ---------------------------------- */
-
-// Tarifa média residencial no Brasil (R$ por kWh), incluindo tributos.
-// Pode ser alterada pelo usuário na interface.
 const TARIFA_PADRAO = 0.76;
 
-// Consumo médio mensal de uma residência brasileira (kWh/mês).
-// Referência aproximada de estudos da EPE/ANEEL (~160 kWh/mês).
 const MEDIA_BRASIL_MENSAL = 163;
 
-// Número de dias considerados no mês para os cálculos.
 const DIAS_NO_MES = 30;
 
-// Meses do ano (rótulos curtos para os gráficos).
 const MESES = [
   'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
   'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
 ];
 
-/* Perfil sazonal do consumo médio brasileiro.
-   Multiplicadores aplicados sobre MEDIA_BRASIL_MENSAL.
-   O verão (Dez–Mar) puxa o consumo para cima por causa do
-   ar-condicionado/ventilação; o inverno tem leve alta pelo chuveiro. */
 const PERFIL_SAZONAL_BRASIL = [
   1.18, // Jan  (verão, calor)
   1.15, // Fev
@@ -50,22 +24,10 @@ const PERFIL_SAZONAL_BRASIL = [
   1.14  // Dez  (verão, festas)
 ];
 
-/* Fatores sazonais por categoria — usados para projetar o consumo
-   ANUAL do próprio usuário de forma mais realista no gráfico de linhas.
-   Climatização sobe muito no verão; Banho (chuveiro) sobe no inverno. */
 const FATORES_SAZONAIS_CATEGORIA = {
   'Climatização': [1.6, 1.5, 1.3, 1.0, 0.7, 0.5, 0.5, 0.6, 0.8, 1.0, 1.3, 1.5],
   'Banho':        [0.7, 0.7, 0.8, 1.0, 1.2, 1.4, 1.4, 1.3, 1.1, 0.9, 0.8, 0.7]
-  // As demais categorias usam fator 1.0 (consumo estável o ano todo).
 };
-
-/* ---- Catálogo de eletrodomésticos ------------------------------------ */
-/*  id          : identificador único
-    nome        : nome exibido
-    potencia    : potência em Watts (W)
-    categoria   : grupo para filtro e gráficos
-    icone       : emoji ilustrativo
-    horasPadrao : horas de uso diário sugeridas ao adicionar            */
 
 const ELETRODOMESTICOS = [
   /* ---------------------- COZINHA ----------------------
@@ -129,13 +91,11 @@ const ELETRODOMESTICOS = [
   { id: 'aquario',       nome: 'Aquário (bomba+luz)',       potencia: 35,   categoria: 'Outros',        icone: '🐠', horasPadrao: 24 }
 ];
 
-/* Lista de categorias derivada do catálogo (ordem de exibição). */
 const CATEGORIAS = [
   'Cozinha', 'Climatização', 'Banho', 'Lavanderia',
   'Entretenimento', 'Escritório', 'Iluminação', 'Outros'
 ];
 
-/* Cor associada a cada categoria — usada nos gráficos. */
 const CORES_CATEGORIA = {
   'Cozinha':        '#E8543F',
   'Climatização':   '#1FA67A',
