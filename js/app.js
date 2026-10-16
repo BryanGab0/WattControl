@@ -1,41 +1,22 @@
-/* =======================================================================
-   app.js  —  WattControl
-   Lógica da aplicação: estado, cálculos de consumo/custo, renderização
-   da tabela e dos gráficos (pizza, barras e linhas).
-   Depende de: database.js e Chart.js (carregados antes deste arquivo).
-   ======================================================================= */
-
-/* ----------------------- Constantes de cálculo ------------------------ */
-// Fator de emissão médio do Sistema Interligado Nacional (kg CO₂ por kWh).
 const FATOR_CO2 = 0.0817;
 
-/* ------------------------------ Estado -------------------------------- */
-// Map<id, { horas:Number, qtd:Number }>
 const selecionados = new Map();
 let tarifa = TARIFA_PADRAO;
 let filtroCategoria = 'Todos';
 let termoBusca = '';
 
-// Instâncias dos gráficos (para destruir antes de recriar).
 let chartPizza = null;
 let chartBarras = null;
 let chartLinhas = null;
 
-/* ----------------------- Atalhos de elementos ------------------------- */
 const $ = (sel) => document.querySelector(sel);
 const fmtBRL = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const fmtNum = (v, d = 1) => v.toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
 
-/* ===================================================================== */
-/*                      FUNÇÕES DE CÁLCULO                                */
-/* ===================================================================== */
-
-// Consumo mensal (kWh) de um item já selecionado.
 function consumoMensalItem(eletro, horas, qtd) {
   return (eletro.potencia * horas * qtd * DIAS_NO_MES) / 1000;
 }
 
-// Retorna lista detalhada dos itens selecionados com cálculos prontos.
 function detalharSelecionados() {
   const linhas = [];
   selecionados.forEach((cfg, id) => {
@@ -53,7 +34,6 @@ function detalharSelecionados() {
   return linhas;
 }
 
-// Totais gerais.
 function calcularTotais(linhas) {
   const kwh = linhas.reduce((s, l) => s + l.kwh, 0);
   const custo = kwh * tarifa;
@@ -64,7 +44,6 @@ function calcularTotais(linhas) {
   return { kwh, custo, co2, difMedia };
 }
 
-// Agrupa consumo por categoria (para o gráfico de pizza).
 function consumoPorCategoria(linhas) {
   const mapa = {};
   linhas.forEach((l) => {
@@ -73,7 +52,6 @@ function consumoPorCategoria(linhas) {
   return mapa;
 }
 
-// Projeção anual: consumo do usuário vs média brasileira (gráfico de linhas).
 function projecaoAnual(linhas) {
   const usuario = new Array(12).fill(0);
 
@@ -89,11 +67,6 @@ function projecaoAnual(linhas) {
   return { usuario, brasil };
 }
 
-/* ===================================================================== */
-/*                      RENDERIZAÇÃO DA INTERFACE                         */
-/* ===================================================================== */
-
-/* ---- Catálogo de eletrodomésticos ---- */
 function renderCatalogo() {
   const grid = $('#catalogo');
   const lista = ELETRODOMESTICOS.filter((e) => {
@@ -119,7 +92,6 @@ function renderCatalogo() {
   `).join('');
 }
 
-/* ---- Tabela dos aparelhos selecionados ---- */
 function renderTabela(linhas, totais) {
   const alvo = $('#selecionados');
 
@@ -193,7 +165,6 @@ function renderTabela(linhas, totais) {
     </table>`;
 }
 
-/* ---- Cartões de indicadores (KPIs) ---- */
 function renderKPIs(totais) {
   $('#kpi-kwh').innerHTML = `${fmtNum(totais.kwh)} <small>kWh</small>`;
   $('#kpi-custo').textContent = fmtBRL(totais.custo);
@@ -215,15 +186,10 @@ function renderKPIs(totais) {
   }
 }
 
-/* ===================================================================== */
-/*                              GRÁFICOS                                  */
-/* ===================================================================== */
-
 const FONTE_GRAFICO = "'Plus Jakarta Sans', sans-serif";
 Chart.defaults.font.family = FONTE_GRAFICO;
 Chart.defaults.color = '#5A584E';
 
-/* Gráfico de PIZZA (donut) — consumo por categoria */
 function renderPizza(linhas) {
   const dados = consumoPorCategoria(linhas);
   const labels = Object.keys(dados);
@@ -257,7 +223,6 @@ function renderPizza(linhas) {
   });
 }
 
-/* Gráfico de BARRAS/COLUNAS — custo mensal por aparelho (Top 8) */
 function renderBarras(linhas) {
   const top = [...linhas].sort((a, b) => b.custo - a.custo).slice(0, 8);
   const labels = top.map((l) => l.nome);
@@ -299,7 +264,6 @@ function renderBarras(linhas) {
   });
 }
 
-/* Gráfico de LINHAS — projeção anual vs média brasileira */
 function renderLinhas(linhas) {
   const { usuario, brasil } = projecaoAnual(linhas);
 
@@ -341,10 +305,6 @@ function renderLinhas(linhas) {
   });
 }
 
-/* ===================================================================== */
-/*                       ORQUESTRAÇÃO / UPDATE                            */
-/* ===================================================================== */
-
 function atualizarTudo() {
   const linhas = detalharSelecionados();
   const totais = calcularTotais(linhas);
@@ -354,10 +314,6 @@ function atualizarTudo() {
   renderBarras(linhas);
   renderLinhas(linhas);
 }
-
-/* ===================================================================== */
-/*                        AÇÕES DO USUÁRIO                                */
-/* ===================================================================== */
 
 function adicionar(id) {
   if (selecionados.has(id)) return; // já está na lista
@@ -385,18 +341,12 @@ function setQtd(id, valor) {
   atualizarTudo();
 }
 
-/* ===================================================================== */
-/*                       LIGAÇÃO DE EVENTOS                               */
-/* ===================================================================== */
-
 function ligarEventos() {
-  // Catálogo (delegação de clique)
   $('#catalogo').addEventListener('click', (e) => {
     const btn = e.target.closest('[data-add]');
     if (btn) adicionar(btn.dataset.add);
   });
 
-  // Tabela de selecionados (delegação)
   $('#selecionados').addEventListener('click', (e) => {
     const t = e.target;
     if (t.dataset.del) return remover(t.dataset.del);
@@ -411,7 +361,6 @@ function ligarEventos() {
     if (t.dataset.qInput) setQtd(t.dataset.qInput, parseInt(t.value) || 1);
   });
 
-  // Filtros de categoria
   $('#chips').addEventListener('click', (e) => {
     const chip = e.target.closest('.chip');
     if (!chip) return;
@@ -420,20 +369,14 @@ function ligarEventos() {
     renderCatalogo();
   });
 
-  // Busca
   $('#busca').addEventListener('input', (e) => { termoBusca = e.target.value; renderCatalogo(); });
 
-  // Tarifa
   $('#tarifa').addEventListener('input', (e) => {
     const v = parseFloat(e.target.value.replace(',', '.'));
     tarifa = isNaN(v) || v < 0 ? 0 : v;
     atualizarTudo();
   });
 }
-
-/* ===================================================================== */
-/*                          INICIALIZAÇÃO                                 */
-/* ===================================================================== */
 
 function montarChips() {
   const cats = ['Todos', ...CATEGORIAS];
